@@ -2,35 +2,22 @@
 
 const arg = require('arg');
 const chalk = require('chalk');
-const pkgUp = require('pkgUp');
 
-
+const getConfig = require('../src/commands/config-mgr.js');
+const start = require ('../src/commands/start.js');
 try {
-
-
 const args = arg({
   '--start': Boolean,
   '--build': Boolean,
 });
-console.log(args);
+//console.log(args);
 
 
 
   if (args['--start']) {
-    const pkgPath = pkgUp.sync({cwd: process.cwd()});
-
-    const pkg = require('pkgPath');
-
-    if (pkg.tool){
-      console.log('found configuration, ', pkg.tool);
-      // then do sumn with found configuration
-    }
-
-    else {
-      console.log(chalk.yellow("sorry, I couldn't find anything, so using default now"));
-
-    }
-
+    const config = getConfig();
+    console.log(config);
+    start(config);
 
     console.log(chalk.bgCyanBright("starting the tool....."));
     
