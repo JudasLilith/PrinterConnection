@@ -1,6 +1,6 @@
 const chalk = require('chalk');
 
-module.export = function createLogger(name) {
+module.exports = function createLogger(name) {
   return {
     log: (...args) => console.log(chalk.gray(...args)),
     warning: (...args) => console.log(chalk.yellow(...args)),
