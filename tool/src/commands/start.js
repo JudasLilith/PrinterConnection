@@ -1,6 +1,6 @@
-const chalk = require('chalk');
+import chalk from 'chalk';
 
-module.exports = function start(config) {
+export default function start(config) {
   console.log("starting...........");
   console.log(chalk.green("got the config file!!"), config);
 }

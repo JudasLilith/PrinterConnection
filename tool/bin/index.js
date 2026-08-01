@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#! /usr/bin/env node
 
 
 import arg from 'arg';
@@ -9,23 +9,35 @@ import getConfig from '../src/commands/config-mgr.js';
 
 import start from '../src/commands/start.js';
 
-import logger from '../src/logger.js';
+import logger from '../src/logger.cjs';
 
 import { execSync } from 'child_process';
 
-import * as readline from "readline";
+import * as readline from "node:readline/promises";
 
 
 /*
 import { ping } from '@network-utils/tcp-ping'
 */
 
-async function ping() {
-
-  const response = await fetch("http://100.103.238.60");
+function ping(ip) {
+  const response = fetch(ip);
   console.log(response.status, response.ok, 'jackshit');
+}
 
 
+
+
+async function getIP() {
+  const r1 = readline.createInterface(({
+    input: process.stdin,
+    output: process.stdout,
+  }));
+
+  let answer = await r1.question("what is your Printer's IP address?: ");
+  console.log(chalk.green(`you wrote: ${answer} `));
+  r1.close();
+  return answer;
 }
 
 try {
@@ -67,11 +79,6 @@ try {
 
     }
     console.log()
-    ping();
-
-
-
-
 
 
 
@@ -79,18 +86,71 @@ try {
 
   if (args['--init'] || args['-i']) {
     console.log(chalk.yellow("setting up the profile......."));
-    const ip = readline.createInterface(({
-      input: process.stdin,
-      output: process.stdout,
-    }));
+    let answer;
+    answer = await getIP();
 
-    r1.question("what is your Printer's IP address?: ", (answer) => {
-      console.log(chalk.green('is ${ answer } what you wrote down?'));
-      r1.close();
-    })
+    let ipcorrect = false;
+    while (ipcorrect === false) {
+      const ask = readline.createInterface(({
+        input: process.stdin,
+        output: process.stdout,
+      }));
+      let ipcorrect = await ask.question(`is ${answer} correct?(y/n): `);
+      console.log(ipcorrect);
+      if (ipcorrect.trim() === "y") {
+        console.log(chalk.green("y was picked! proceeding........"));
+        ask.close();
+        break;
+      }
+
+      else if (ipcorrect === "n") {
+        console.log(chalk.yellow(`
+****:-+++----------++++++++++++-++--------- :   ******************************+-: :::---***%**++++*+
+****-++++-------------+++++---+---+-------+++**+******************************:  :::------+++++-+**+
+****++++--+------------+--+-+--------+++++-+++++*****************************-: :::-------------++++
+*****++++------++---------------++++****++-+**%++***************************+::::---------------::-+
+*****++++-----++++++-++-------+*++++*++++----+- +*************************** :-:---------------::-+*
+******+++--++++++++++------+++++++****++++--- ++-**************************: :--------:::-------+***
+*******-++++---+-+---+-++-++++++*-++++++------ +:**************************-+++------:::------++++++
+********-------++----++-++++++++--+++++--------: ******************************+------:-------++++++
+*******-+--+++-+-+--++++-------+++++++-+--------- *****************************-:------------+++++++
+*******-++--++++--+--+++++++------------++-------+-****************************+-:---------+-+++++--
+********-+--+++----+--++++++++++-------++++**+++--+****************************+-:---------+++++++--
+*********++-+++*+--+++----+++---------++-+++++++-:+*****************************+-------++++++++++--
+***********-++++-++++++-----+--------+++---++++++++******************************------++++++++++---
+***********%%+----+++++++-+-+----++--+++++++++++*:*******************************-----+++++++++++---
+*********%%%*%-+++++++++++-+++---+--++*++++++++++********************************---++++++++++++----
+*******%%%%%%%-:--+++++++++++++++++-++++++++++++-%*%%%%****+**********************++++++++++++++----
+*****%%%%%%%%%*:--+++++++++++++++++++++++-+++++++*%%*%%%%****************************++++++++++++---
+%%%%%%%%%%%%%%%+++++++++++*++++++++++-------+++++*%%%%%%%%%%%%*******************************++-----
+%%%%%*%%%%%%%%%%+--+++++++++++++++++++------+++++%%%%%%%%%%%%%%%%*****************************++----
+*%%%%%%%%%%%%%%%%+-+++++++++++++++++++++++-++++*%%%%%%%%%%%%%%%%%%%%****************************+---
+%%%%%%%%%%%%%%%%%*+-+++++++++++++++++++++++%%%%%%%%%%%%%%%%%%%%%%%%%%%************************%**+--
+%%%%%%%%%%%%%%%%%%*+-++++++++++++++++++%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%***************************-- 
+`));
+        console.log(chalk.yellow("try again, Neiman"));
+        ask.close();
+        answer = await getIP();
+      }
+
+      else {
+        ask.close();
+        console.log(chalk.red("wrong input!"));
+      }
+    }
+
+
+
+
+
+
   }
 
+
+
 }
+
+
 
 catch (e) {
   console.log(chalk.red(e.message));
