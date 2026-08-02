@@ -15,6 +15,7 @@ import { execSync } from 'child_process';
 
 import * as readline from "node:readline/promises";
 
+import blessed from 'blessed';
 
 /*
 import { ping } from '@network-utils/tcp-ping'
@@ -54,17 +55,14 @@ try {
 
     '--init': Boolean,
     '-i': Boolean,
+
   });
+
+  console.log(chalk.bgCyanBright(chalk.black("starting the tool.....")));
+
   //console.log(args);
   const config = getConfig();
 
-  console.log(config);
-
-
-
-  start(config);
-
-  console.log(chalk.bgCyanBright(chalk.black("starting the tool.....")));
 
 
 
@@ -76,8 +74,52 @@ try {
     if (checkTailscale === 'Command failed: tailscale status --peers=false') {
       console.log(chalk.red("tailscale is not on; turning on......"));
       execSync('tailscale up');
-
     }
+    var screen = blessed.screen({
+      smartCSR: true
+    });
+
+    screen.title = 'my window title';
+
+    // Create a box perfectly centered horizontally and vertically.
+    var box = blessed.box({
+      top: 'center',
+      left: 'center',
+      width: '50%',
+      height: '50%',
+      content: 'Hello {bold}world{/bold}!',
+      tags: true,
+      border: {
+        type: 'line'
+      },
+      style: {
+        fg: 'white',
+        bg: 'magenta',
+        border: {
+          fg: '#f0f0f0'
+        },
+        hover: {
+          bg: 'green'
+        }
+      }
+    });
+
+    // Append our box to the screen.
+    screen.append(box);
+
+
+
+    // Quit on Escape, q, or Control-C.
+    screen.key(['escape', 'q', 'C-c'], function (ch, key) {
+      return process.exit(0);
+    });
+
+    // Focus our element.
+    box.focus();
+
+    // Render the screen.
+    screen.render();
+
     console.log()
 
 
@@ -138,12 +180,7 @@ try {
         console.log(chalk.red("wrong input!"));
       }
     }
-    saveConfig('remove', `ip = ${answer}`);
-    getConfig();
-
-
-
-
+    saveConfig('append', `ip = ${answer}`);
 
   }
 
