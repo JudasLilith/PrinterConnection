@@ -5,7 +5,7 @@ import arg from 'arg';
 
 import chalk from 'chalk';
 
-import getConfig from '../src/commands/config-mgr.js';
+import getConfig, { saveConfig } from '../src/commands/config-mgr.js';
 
 import start from '../src/commands/start.js';
 
@@ -138,7 +138,8 @@ try {
         console.log(chalk.red("wrong input!"));
       }
     }
-
+    saveConfig('remove', `ip = ${answer}`);
+    getConfig();
 
 
 
