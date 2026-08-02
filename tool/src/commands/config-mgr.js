@@ -27,8 +27,10 @@ export default function getConfig() {
 }
 
 export function saveConfig(status, value) {
-  let config = ini.parse(fs.readFileSync(configPath, 'utf8'));
 
+  let config = ini.parse(fs.readFileSync(configPath, 'utf8'));
+  console.log(chalk.red("WARNING! the previous crap on the config files will all be wiped!"));
+  fs.writeFileSync(configPath, '');
   if (status === 'add') {
     config.ip = value;
     fs.writeFileSync(configPath, ini.stringify(config));

@@ -83,7 +83,14 @@ try {
     }
     setInterval(async () => {
       let result = await pinger(config);
-      console.log(result);
+      if (result.alive) {
+        process.stdout.write(chalk.green('Your machine is running                            '));
+        process.stdout.write("\r");
+      }
+      else {
+        process.stdout.write(chalk.red('Oh my, it doesn\'t seem to be running.....'));
+        process.stdout.write('\r');
+      }
 
     },
       500);
@@ -91,6 +98,7 @@ try {
   }
 
   if (args['--init'] || args['-i']) {
+
     console.log(chalk.yellow("setting up the profile......."));
     let answer;
     answer = await getIP();
