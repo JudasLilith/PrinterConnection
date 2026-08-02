@@ -22,27 +22,25 @@ const configPath = path.join(__dirname, '../../../config/PrinterConnection.conf'
 
 export default function getConfig() {
   let config = ini.parse(fs.readFileSync(configPath, 'utf8'));
-  console.log(config.ip)
-  fs.writeFileSync(configPath, ini.stringify(config));
+  console.log(config.ip);
+  return config;
 }
 
 export function saveConfig(status, value) {
   let config = ini.parse(fs.readFileSync(configPath, 'utf8'));
 
   if (status === 'add') {
-    fs.writeFileSync(configPath, value);
+    config.ip = value;
+    fs.writeFileSync(configPath, ini.stringify(config));
   }
   else if (status === 'append') {
     fs.appendFileSync(configPath, value);
   }
 
   else if (status === 'remove') {
-    fs.writeFileSync(configPath, value);
-    console.log(configPath, typeof configPath);
+    delete config.ip;
+    fs.writeFileSync(configPath, ini.stringify(config));
   }
-
-
-  fs.writeFileSync(configPath, ini.stringify(config));
 
 
 }

@@ -17,13 +17,17 @@ import * as readline from "node:readline/promises";
 
 import blessed from 'blessed';
 
+import ping from 'ping';
+
 /*
 import { ping } from '@network-utils/tcp-ping'
 */
 
-function ping(ip) {
-  const response = fetch(ip);
-  console.log(response.status, response.ok, 'jackshit');
+async function pinger(config) {
+  const response = await ping.promise.probe(config.ip);
+  //console.log(response.alive, response.time, 'jackshit');
+  //console.log(response);
+  return { alive: response.alive, time: response.time };
 }
 
 
@@ -34,6 +38,8 @@ async function getIP() {
     input: process.stdin,
     output: process.stdout,
   }));
+
+
 
   let answer = await r1.question("what is your Printer's IP address?: ");
   console.log(chalk.green(`you wrote: ${answer} `));
@@ -75,54 +81,12 @@ try {
       console.log(chalk.red("tailscale is not on; turning on......"));
       execSync('tailscale up');
     }
-    var screen = blessed.screen({
-      smartCSR: true
-    });
+    setInterval(async () => {
+      let result = await pinger(config);
+      console.log(result);
 
-    screen.title = 'my window title';
-
-    // Create a box perfectly centered horizontally and vertically.
-    var box = blessed.box({
-      top: 'center',
-      left: 'center',
-      width: '50%',
-      height: '50%',
-      content: 'Hello {bold}world{/bold}!',
-      tags: true,
-      border: {
-        type: 'line'
-      },
-      style: {
-        fg: 'white',
-        bg: 'magenta',
-        border: {
-          fg: '#f0f0f0'
-        },
-        hover: {
-          bg: 'green'
-        }
-      }
-    });
-
-    // Append our box to the screen.
-    screen.append(box);
-
-
-
-    // Quit on Escape, q, or Control-C.
-    screen.key(['escape', 'q', 'C-c'], function (ch, key) {
-      return process.exit(0);
-    });
-
-    // Focus our element.
-    box.focus();
-
-    // Render the screen.
-    screen.render();
-
-    console.log()
-
-
+    },
+      500);
 
   }
 
