@@ -1,9 +1,10 @@
 {
   "name": "tool",
+  "type": "module",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "bin": "./bin/index.js",
+  "bin": "./tool/bin/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,5 +19,8 @@
     "cosmiconfig": "^9.0.2",
     "ini": "^7.0.0",
     "ping": "^1.0.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.1"
   }
 }

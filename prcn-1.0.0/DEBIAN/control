@@ -1,0 +1,8 @@
+Package: prcn
+Version: 1.0.0
+Section: utils
+Priority: optional
+Architecture: all
+Maintainer: JudasLilith <judas1lilih@gmail.com>
+Depends: nodejs (>= 18)
+Description: a cli tool to check if your printer is alive
