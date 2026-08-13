@@ -51,3 +51,5 @@ pc -i
 - Made for Hack club, YSWS projects. find more about them at: hackclub.com
 
 - inspired by this tutorial: <https://citw.dev/tutorial/create-your-own-cli-tool>
+
+- I am not responsible for any system breaks, I am just a teenager :,(
