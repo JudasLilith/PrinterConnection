@@ -39,13 +39,21 @@ cd PrinterConnection
 sudo apt install prcn-1.0.0.deb
 ```
 
-good boy~ following instructions like a little puppy,
-
-1. the program is now installed, and you can now use the program by calling:
+1. the program is now installed, and you can now setup the program by calling:
 
 ```bash
 pc -i
 ```
+
+1. be sure to plug in the ip for your local machine, so it knows what to ping. if you mess up, you can reset the ip any time!
+
+2. Now, you can check whether or not your printer is working by using the command:
+
+```bash
+pc -s
+```
+
+#### Have fun using it
 
 #### Credits
 
